@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Abstract | Avoiding Side Effects in Complex Environments</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Abstract" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Making RL agents behave with an unsupervised penalty term." />
+<meta property="og:description" content="Making RL agents behave with an unsupervised penalty term." />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="Avoiding Side Effects in Complex Environments" />
+<script type="application/ld+json">
+{"headline":"Abstract","description":"Making RL agents behave with an unsupervised penalty term.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/aup.png"}},"@type":"WebSite","url":"http://localhost:4000/","name":"Avoiding Side Effects in Complex Environments","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=1f60aa16fe19541700b420ba27ab4e31875de213">
+  </head>
+  <body>
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Avoiding Side Effects in Complex Environments</h1>
+      <h2 class="project-tagline">
+        <b>Making RL agents behave with an unsupervised penalty term.</b>
+      </h2>
+      <h2 class="project-tagline">
+        Alex Turner*, Neale Ratzlaff*, Prasad Tadepalli
+      </h2>
+      
+        <a href="https://github.com/neale/safelife-k2" class="btn">View on GitHub</a>
+      
+      
+        <a href="https://arxiv.org/abs/2006.06547" class="btn">NeurIPS Paper</a>
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h1 id="abstract">Abstract</h1>
+
+<p>Reward function specification can be difficult, even in simple environments. Rewarding the agent for making a widget may be easy, but penalizing the multitude of possible negative side effects is hard. <a href="https://arxiv.org/abs/1902.09725">In toy environments</a>, Attainable Utility Preservation (AUP) avoided side effects by penalizing shifts in the ability to achieve randomly generated goals. We scale this approach to large, randomly generated environments based on Conway’s Game of Life. By preserving optimal value for a single randomly generated reward function, AUP incurs modest overhead while leading the agent to complete the specified task and avoid side effects.</p>
+
+<h1 id="experiments">Experiments</h1>
+
+<p>In Conway’s Game of Life, cells are alive or dead. Depending on how many live neighbors surround a cell, the cell comes to life, dies, or retains its state. Even simple initial conditions can evolve into complex and chaotic patterns.</p>
+
+<p><a href="https://www.partnershiponai.org/safelife/">SafeLife</a> turns the Game of Life into an actual game. An autonomous agent moves freely through the world, which is a large finite grid. In the eight cells surrounding the agent, no cells spawn or die – the agent can disturb dynamic patterns by merely approaching them. There are many colors and kinds of cells, many of which have unique effects.</p>
+
+<p align="center">
+<img alt="append-spawn, PPO" src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/gifs/append-spawn_ppo-min.gif" />
+<img alt="prune-still-easy, PPO" src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/gifs/prune-still_ppo-min.gif" />
+</p>
+
+<p><img src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/img/explanation-caption.png" alt="" /></p>
+
+<p>As the environment only rewards pruning red cells or creating gray cells in blue tiles, unpenalized RL agents often make a mess of the green cells (as shown above). The agent should “leave a small footprint” by not disturbing unrelated parts of the state, such as the green cells. Roughly, SafeLife measures side effects as the degree to which the agent disturbs green cells.</p>
+
+<p>For each of the four following tasks, we randomly generate five curricula of 8 levels each. For each curriculum, we randomly sample a test-time trajectory from the baseline and AUP policy networks. The side-by-side results are shown below; for quantitative results, see our paper.</p>
+
+<h2 id="prune-still-easy">prune-still-easy</h2>
+
+<p>The agent is rewarded for destroying red cells. After enough cells are destroyed, the agent may exit the level.</p>
+
+<p align="center">
+<img alt="prune-still-easy, PPO" src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/gifs/prune-still_ppo-min.gif" />
+<img alt="prune-still-easy, AUP" src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/gifs/prune-still_aup-min.gif" />
+</p>
+
+<h2 id="append-still-easy">append-still-easy</h2>
+
+<p>The agent is rewarded for creating gray cells on light blue tiles. After enough gray cells are present on blue tiles, the agent may exit the level.</p>
+
+<p align="center">
+<img alt="append-still-easy, PPO" src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/gifs/append-still-easy_ppo-min.gif" />
+<img alt="append-still-easy, AUP" src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/gifs/append-still-easy_aup-min.gif" />
+</p>
+
+<h2 id="append-still">append-still</h2>
+
+<p><code class="language-plaintext highlighter-rouge">append-still-easy</code>, but with more green cells.</p>
+
+<p align="center">
+<img alt="append-still, PPO" src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/gifs/append-still_ppo-min.gif" />
+<img alt="append-still, AUP" src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/gifs/append-still_aup-min.gif" />
+</p>
+
+<h2 id="append-spawn">append-spawn</h2>
+
+<p><code class="language-plaintext highlighter-rouge">append-still</code>, but with noise generated by stochastic yellow spawners.</p>
+
+<p align="center">
+<img alt="append-spawn, PPO" src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/gifs/append-spawn_ppo-min.gif" />
+<img alt="append-spawn, AUP" src="https://raw.githubusercontent.com/avoiding-side-effects/avoiding-side-effects.github.io/master/assets/gifs/append-spawn_aup-min.gif" />
+</p>
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner">
+            <a href="https://github.com/neale/safelife-k2">chasedenecke.github.io</a> is maintained by <a href="https://github.com/chasedenecke">chasedenecke</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>
