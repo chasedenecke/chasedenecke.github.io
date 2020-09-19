@@ -296,14 +296,14 @@ body {
   color: #606c71;
 }
 
-a {
+/* a {
   color: #1e6bb8;
   text-decoration: none;
 }
 a {
   color: #1e6bb8;
   text-decoration: none;
-}
+} */
 a:hover {
   text-decoration: underline;
 }
@@ -418,6 +418,7 @@ a:hover {
 
 .author {
   color: #ffffff;
+  text-decoration: none;
 }
 
 .project-authors {
@@ -631,21 +632,20 @@ a:hover {
 }
 
 #wrapper { 
-    width: 920px; 
+    width: 832px; 
     height: auto; 
     margin: 0 auto;
 } 
 #home1 { 
     width: 47.5%; 
-    height: 300px; 
-    float: left; 
-    margin-right: 5%;
+    height: width; 
+    /* float: left;  */
 } 
 
 #home2 { 
     width: 47.5%; 
-    height: 300px; 
-    float: left; 
+    height: width; 
+    /* float: left;  */
 }
 
 .clear{
